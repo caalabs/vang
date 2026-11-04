@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* true-black-flat: elevation by lightness alone (#000 → #111 → #2a2a2a), colour only on data */
+@theme {
+  --color-ground: #000000;
+  --color-surface: #111111;
+  --color-raised: #2a2a2a;
+  --color-line: #1a1a1a;
+  --color-control: #444444;
+  --color-ink: #ffffff;
+  --color-muted: #b4b4b4;
+  --color-faint: #949494;
+  --color-accent: #c6f24e;
+  --color-accent-bg: #222a10;
+  --color-negative: #e5566f;
+  --color-negative-bg: #2c1a20;
+  --color-warning: #e5a93b;
+  --color-warning-bg: #2b2414;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@layer base {
+  html, body, #root { min-height: 100%; }
+  body {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  button { touch-action: manipulation; }
+  :focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+  ::selection { background: #3a4a12; }
+}
+.num { font-variant-numeric: tabular-nums; }
+
+/* press feedback for every tappable control */
+.press { transition: transform 140ms var(--ease-out), background-color 160ms var(--ease-out), color 160ms var(--ease-out), opacity 160ms; }
+.press:active:not(:disabled) { transform: scale(0.96); }
+
+/* a screen shown again after display:none replays this */
+.screen { animation: screen-in 280ms var(--ease-out) backwards; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(6px); } }
+
+.rise { animation: rise 360ms var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 40ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+
+/* level meter while the voice is being generated */
+.meter span { display: block; width: 3px; border-radius: 2px; background: currentColor; transform-origin: bottom; animation: meter 900ms ease-in-out infinite; }
+.meter span:nth-child(2) { animation-delay: -300ms; }
+.meter span:nth-child(3) { animation-delay: -600ms; }
+.meter span:nth-child(4) { animation-delay: -150ms; }
+@keyframes meter { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+
+/* waveform bars grow in, left to right */
+.bar-in { transform-origin: center; animation: bar-in 520ms var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 9ms); }
+@keyframes bar-in { from { transform: scaleY(0.05); opacity: 0.2; } }
+
+.spin { animation: spin 800ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* iOS Safari insets textarea text by ~3px each side; match it in the mirror. shortcut: unverified on device, check on the iPhone */
+@supports (-webkit-touch-callout: none) { .script-mirror { padding-inline: calc(1.25rem + 3px); } }
+
+/* audio tags inside the script: same metrics as the textarea, so only the background is added */
+.tag-hl { background: var(--color-accent-bg); color: var(--color-accent); border-radius: 5px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
+}

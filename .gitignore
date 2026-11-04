@@ -1,0 +1,10 @@
+.superpowers/
+node_modules/
+.env*
+!.env.example
+*.mp3
+scratch-spike/
+dist
+*.log
+.DS_Store
+.taste-skill/
